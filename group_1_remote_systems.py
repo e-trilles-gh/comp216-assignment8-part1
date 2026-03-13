@@ -79,7 +79,7 @@ import threading
         ##starts the thread after being created
         #th.start()
 
-    #for thread in threads:
+    #for thread in thrdeads:
 
         ##ensures that all threads are finished before
         ##proceeding to the rest of the code
@@ -89,30 +89,42 @@ import threading
 #thread_download()
 
 #PartB
-from ftp_connection import FTPConnection 
+from ftp_connection import FTPConnection
+from partb_driver import PartBDriver
+from prompt import Prompt
+from dotenv import load_dotenv
+import os
 
-username = 'ftp_comp216'
-password = 'Password123!'
-host = 'ec2-34-200-249-108.compute-1.amazonaws.com'
-client = FTPConnection(host, username, password)
+load_dotenv()
+prompter = Prompt()
 
-client.server_file_list()
-client.client_file_list()
-print(client.server_current_directory)
-print(client.selected_file)
-print('check property initiated')
+# test code
+host = os.getenv('FTP_HOST')
+username = os.getenv('FTP_USER')
+password = os.getenv('FTP_PASSWORD')
+for i in range(3):
+    try:
+        
+        # test code
+        client = FTPConnection(host, username, password)
+        client.quit_connection()    
+        
+        # functioning code
+        #credentials = prompter.capture_credentials()
+        #client = FTPConnection(host,credentials['username'], credentials['password'])
+        #client.quit_connection()
+        
+        break
+    except error_reply:
+        print(f'Check your username or password are correct.')
+    except Exception:
+        print('Error while logging in')
 
-client.upload_file('test_ftp_file.txt')
-client.download_file('test_ftp_file.txt')
-client.delete_file('test_ftp_file.txt')
-client.server_current_directory = 'ftp/upload'
-client.server_current_directory = '1'
-print(client.server_current_directory)
-client.client_current_directory = '__pycache__'
-client.client_current_directory = '1'
-print(client.client_current_directory)
+driver = PartBDriver(user_name=username, password=password)
 
-client.manage_multiple_files('download')
-print('downloaded files')
-client.manage_multiple_files('upload')
-print('uploaded files')
+# functioning code
+# driver = PartBDriver(username=credentials['username'], password=credentials['password'])
+
+driver.run_driver(True)
+
+print('end')
