@@ -7,6 +7,7 @@ import os, threading
 class PartBDriver:
     load_dotenv()
     
+    # the host is coming from the .env file
     def __init__(self, host = os.getenv('FTP_HOST'), user_name = os.getenv('FTP_USER'), password = os.getenv('FTP_PASSWORD')):
         self.host = host
         self.username = user_name
@@ -155,20 +156,21 @@ class PartBDriver:
             return        
 
     def run_driver(self, bool_flag):
+        # instaniating the Prompt class and assign to attribute
         self.prompter = Prompt()
         isConnected = bool_flag
+        isTransferring = True
         print(bool_flag)
         process = ''
         
+        # connect to the FTP server
         self.client = FTPConnection(self.host,self.username, self.password)
-        print(f'host: {self.host}, username: {self.username}, pass: {self.password}')
         
-        isTransferring = True
         while (isConnected == True):
             exit = False
 
             while True:
-                #self.client.server_current_directory() = '/home/' + self.username + '/ftp/upload'
+                # ask the user of what operation to make
                 process = self.prompter.identify_operation()
                 match process:
                     case 'upload':
