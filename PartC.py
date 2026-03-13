@@ -23,6 +23,8 @@ with open(LOCAL_FILE, 'wb') as f:
 ##Parsing the PEM file into a RSAKEY and then setting up the SSH client then connecting to the server
 key = paramiko.RSAKey.from_private_key_file(KEY_PATH)
 ssh = paramiko.SSHClient()
+
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 print("Should be connecting now...will find out soon")
 ssh.connect(hostname=HOST, username=USERNAME, pkey=key)
 
